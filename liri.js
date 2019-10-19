@@ -47,7 +47,8 @@ function bandsInTown() {
 
     axios.get(bandsUrl).then(
         function(response) {
-        // console.log(response.data[0]);
+        // console.log(bandsUrl);
+        console.log(response.data[0]);
         console.log("------------------");
         console.log("Venue Name: " + response.data[0].venue.name);
         console.log("------------------");
@@ -99,7 +100,7 @@ function movieSearch() {
 
     axios.get(queryUrl).then(
         function(response) {
-        // console.log(response.data);
+         console.log(queryUrl);
         console.log("------------------");
         console.log("Title: " + response.data.Title);
         console.log("------------------");
