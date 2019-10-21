@@ -31,10 +31,11 @@ switch(action) {
         bandsInTown();
         break;
     case "spotify-this-song":
-        spotify();
+        spotifyThis();
         break;
     case "movie-this":
         movieSearch();
+        break;
     case "do-what-it-says":
         randomCall();
         break;
@@ -48,7 +49,7 @@ function bandsInTown() {
     axios.get(bandsUrl).then(
         function(response) {
         // console.log(bandsUrl);
-        console.log(response.data[0]);
+        // console.log(response.data[0]);
         console.log("------------------");
         console.log("Venue Name: " + response.data[0].venue.name);
         console.log("------------------");
@@ -78,13 +79,30 @@ function bandsInTown() {
 }
 
 // ------------------------------ SPOTIFY FUNCTION ------------------------------
-function spotify() {
+function spotifyThis() {
 
     if (!value) {
         console.log("You didn't pick anything! Listen to this!");
-        value = "The Sign by Ace of Base";
+        value = "The Sign";
     }
 
+    spotify.search({type: "track", query: value, limit: 10}, (err, data) => {
+      if (err) {
+        return console.log("ERROR REPORTED: " + err);
+      }
+    var spotifyData = data.tracks.items;
+
+    for (var i = 0; i < spotifyData.length; i++) {
+      console.log("Artist(s): ", spotifyData[i].artists.map(artist => artist.name).join(', '));
+      console.log("------------------");
+      console.log("Song Name: ", spotifyData[i].name);
+      console.log("------------------");
+      console.log("Preview link: ", spotifyData[i].preview_url);
+      console.log("------------------");
+      console.log("Album Name: ", spotifyData[i].album.name);
+      console.log("------------------");
+  }
+    });
 }
 
 // ------------------------------ OMDB FUNCTION ------------------------------
@@ -100,7 +118,7 @@ function movieSearch() {
 
     axios.get(queryUrl).then(
         function(response) {
-         console.log(queryUrl);
+        // console.log(queryUrl);
         console.log("------------------");
         console.log("Title: " + response.data.Title);
         console.log("------------------");
@@ -142,5 +160,21 @@ function movieSearch() {
 
 // ------------------------------ RANDOM TEXT FUNCTION ------------------------------
 function randomCall() {
+  fs.readFile("random.txt", "utf8", (err, data) => {
+    if (err) {
+        console.log("ERROR REPORTED: ", err);
+    }
+    var dataArray = data.split(",");
+    action = dataArray[0];
+    value = dataArray[1];
 
+    if (action === "concert-this") {
+        bandsInTown(value);
+    }
+    else if (action === "spotify-this-song") {
+        spotifyThis(value);
+    } else {
+        movieSearch(value);
+    }
+});
 }
