@@ -86,22 +86,21 @@ function spotifyThis() {
         value = "The Sign";
     }
 
-    spotify.search({type: "track", query: value, limit: 10}, (err, data) => {
+    spotify.search({type: "track", query: value}, (err, data) => {
       if (err) {
         return console.log("ERROR REPORTED: " + err);
       }
     var spotifyData = data.tracks.items;
 
-    for (var i = 0; i < spotifyData.length; i++) {
-      console.log("Artist(s): ", spotifyData[i].artists.map(artist => artist.name).join(', '));
+      console.log("Artist(s): ", spotifyData[0].artists[0].name);
       console.log("------------------");
-      console.log("Song Name: ", spotifyData[i].name);
+      console.log("Song Name: ", spotifyData[1].name);
       console.log("------------------");
-      console.log("Preview link: ", spotifyData[i].preview_url);
+      console.log("Preview link: ", spotifyData[0].artists[0].external_urls.spotify);
       console.log("------------------");
-      console.log("Album Name: ", spotifyData[i].album.name);
+      console.log("Album Name: ", spotifyData[0].album.name);
       console.log("------------------");
-  }
+  
     });
 }
 
